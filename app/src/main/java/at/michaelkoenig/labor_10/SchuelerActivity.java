@@ -17,7 +17,7 @@ import java.util.List;
 public class SchuelerActivity extends AppCompatActivity {
 
     private List<Schueler> schueler;
-    private ArrayAdapter<Schueler> schuelerAdapter;
+    private SchuelerAdapter schuelerAdapter;
     private RecyclerView recvwSchueler;
 
     @Override
@@ -33,8 +33,9 @@ public class SchuelerActivity extends AppCompatActivity {
             setTitle(klasse.getName());
             schueler = klasse.getSchueler();
             Collections.sort(schueler);
-//            schuelerAdapter = new KlasseAdapter(schueler);
-//            recvwSchueler.setAdapter(schuelerAdapter);
+
+            schuelerAdapter = new SchuelerAdapter(schueler);
+            recvwSchueler.setAdapter(schuelerAdapter);
         }
     }
 }
