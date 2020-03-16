@@ -1,13 +1,11 @@
 package at.michaelkoenig.labor_10;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,36 +16,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements KlasseAdapter.CustomClickListener {
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_CODE = 1;
     public static final String EXTRA_TAG = "KLASSE";
 
     private List<Klasse> klassen = new ArrayList<>();
-    private ArrayAdapter<Klasse> klassenAdapter;
-    private ListView lstvwKlassen;
+    private KlasseAdapter klassenAdapter;
+    private RecyclerView recvwKlassen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        lstvwKlassen = findViewById(R.id.lstvw_klassen);
-
-        klassenAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1,
-                klassen);
-
-        lstvwKlassen.setAdapter(klassenAdapter);
-
-        lstvwKlassen.setOnItemClickListener((parent, view, position, id) -> {
-            Klasse klasse = klassenAdapter.getItem(position);
-            Intent intent = new Intent(this, KlasseActivity.class);
-            intent.setAction(Intent.ACTION_VIEW);
-            intent.putExtra(MainActivity.EXTRA_TAG, klasse);
-
-            this.startActivityForResult(intent, REQUEST_CODE);
-        });
+        recvwKlassen = findViewById(R.id.recvw_klassen);
+        recvwKlassen.setLayoutManager(new LinearLayoutManager(this));
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(this.getResources().openRawResource(R.raw.schueler)))) {
             String line;
@@ -66,8 +50,18 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        klassenAdapter = new KlasseAdapter(klassen, this);
+        recvwKlassen.setAdapter(klassenAdapter);
+
     }
 
 
-
+    @Override
+    public void onClick(int position) {
+        Intent intent = new Intent(this, SchuelerActivity.class);
+        intent.putExtra(EXTRA_TAG, klassen.get(position));
+        intent.setAction(Intent.ACTION_VIEW);
+        startActivity(intent);
+    }
 }

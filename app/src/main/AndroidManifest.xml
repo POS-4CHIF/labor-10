@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".KlasseActivity"
+        <activity android:name=".SchuelerActivity"
             android:parentActivityName=".MainActivity">
         </activity>
         <activity android:name=".MainActivity">
